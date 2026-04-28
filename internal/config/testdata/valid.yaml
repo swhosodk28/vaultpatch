@@ -1,0 +1,10 @@
+vault:
+  address: "https://vault.example.com"
+  token_env: "VAULT_TOKEN"
+  namespace: "admin"
+
+environments:
+  - name: staging
+    prefix: secret/data/staging
+  - name: production
+    prefix: secret/data/production
