@@ -51,7 +51,10 @@ func (l *Logger) Log(event Event) error {
 		return fmt.Errorf("audit: marshal event: %w", err)
 	}
 	_, err = fmt.Fprintf(l.out, "%s\n", data)
-	return err
+	if err != nil {
+		return fmt.Errorf("audit: write event: %w", err)
+	}
+	return nil
 }
 
 // LogDiff records a diff operation event.
@@ -75,6 +78,19 @@ func (l *Logger) LogApply(env, path string, dryRun bool, err error) error {
 		Environment: env,
 		Path:        path,
 		Details:     map[string]string{"dry_run": fmt.Sprintf("%v", dryRun)},
+	}
+	if err != nil {
+		e.Error = err.Error()
+	}
+	return l.Log(e)
+}
+
+// LogRead records a read operation event.
+func (l *Logger) LogRead(env, path string, err error) error {
+	e := Event{
+		Type:        EventRead,
+		Environment: env,
+		Path:        path,
 	}
 	if err != nil {
 		e.Error = err.Error()
