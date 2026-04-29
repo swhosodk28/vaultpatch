@@ -47,3 +47,9 @@ func FromFlags(patterns, types []string) Options {
 		Types:    trimAll(types),
 	}
 }
+
+// IsEmpty reports whether the options contain no patterns and no type filters,
+// meaning no filtering will be applied.
+func (opts Options) IsEmpty() bool {
+	return len(opts.Patterns) == 0 && len(opts.Types) == 0
+}
