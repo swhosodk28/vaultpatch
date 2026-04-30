@@ -74,3 +74,14 @@ func TestApply_SubstringPattern(t *testing.T) {
 		t.Fatalf("unexpected result: %+v", got)
 	}
 }
+
+func TestApply_MultipleTypes(t *testing.T) {
+	got := filter.Apply(entries(), filter.Options{Types: []string{"added", "removed"}})
+	if len(got) != 2 {
+		t.Fatalf("expected 2 entries, got %d", len(got))
+	}
+	keys := map[string]bool{got[0].Key: true, got[1].Key: true}
+	if !keys["db/password"] || !keys["db/user"] {
+		t.Fatalf("unexpected keys in result: %+v", got)
+	}
+}
